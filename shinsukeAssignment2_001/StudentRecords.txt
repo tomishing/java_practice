@@ -1,0 +1,6 @@
+100,shin tomi, aa,ARTS,tomita@ggg.com,4.0
+300,shin tomi, eee,ARTS,tomita@gmaio.com,2.0
+200,a r, a,ARTS,tomita@ttt.com,4.0
+500,kk bb, cc,ARTS,ddd@bb.com,1.0
+400,t y, c,ARTS,aaa@gmail.com,4.0
+600,a e, c,BUSINESS,ttt@pp.com,7.0

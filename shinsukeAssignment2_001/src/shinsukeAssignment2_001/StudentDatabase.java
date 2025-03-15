@@ -2,6 +2,9 @@ package shinsukeAssignment2_001;
 
 import java.io.*;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class StudentDatabase {
 	private static Scanner input = new Scanner(System.in);
@@ -9,57 +12,112 @@ public class StudentDatabase {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		// io
-		String filename = new String("StudentRecords.txt");
+		String filename = "StudentRecords.txt";
 		File file = new File(filename);
-
-		if (!file.exists())
-			file.createNewFile();
+		file.createNewFile();
 
 		FileWriter fw = new FileWriter(filename, true);
-		PrintWriter pw = new PrintWriter(fw);
+
+		// Array
+		ArrayList<String[]> slist = new ArrayList<>();
 
 		// class
-		int cap = 2;
+		int cap = 1;
 		Student[] students = new Student[cap];
 
 		// Prompts
-		System.out.println("\nWhich option do you want?");
-		System.out.println("""
-				1. Add a New Student\n
-				2. Modify an Existing Record (Change GPA)\n
-				3. Search by Email Address\n
-				4. Search by Degree Program\n
-				Press 1, 2, 3 or 4.
-				""");
-		int a = input.nextInt();
-		input.nextLine();
-		switch (a) {
-		case 1: {
-			newStu(students);
-			bubbleSort(students, 2);
-			addData(students, pw);
-			display(students);
-			break;
+		while (true) {
+			PrintWriter pw = new PrintWriter(fw);
+			System.out.println("\nWhich option do you want?");
+			System.out.println("""
+					1. Add a New Student
+					2. Modify an Existing Record (Change GPA)
+					3. Search by Email Address
+					4. Search by Degree Program
+					5. Exit
+					Press 1, 2, 3, 4 or 5.
+					""");
+			int choice = input.nextInt();
+			input.nextLine();
+
+			switch (choice) {
+			case 1:
+				arrayRecord(file, slist);
+				if (slist.size() == 0) {
+					System.out.println("File is empty");
+				} else {
+					System.out.print("Existing ID: ");
+					for (String[] list : slist) {
+						System.out.print(list[0] + " ");
+					}
+					System.out.println();
+					System.out.println("Please select unique ID");
+
+				}
+				newStu(students, slist);
+				addData(students, pw);
+				arrayRecord(file, slist);
+				pw.flush();
+				sortArray(slist);
+				displayArray(slist);
+				break;
+
+			case 2:
+				if (file.length() == 0) {
+					System.out.println("No Data found");
+				} else {
+					arrayRecord(file, slist); // file -> Array
+					modifyRecord(slist); // modify a value in the array
+					sortArray(slist); // Sort the array by Student ID
+					displayArray(slist); // display sorted array
+					saveTxt(slist, pw);
+				}
+				break;
+
+			case 3: {
+				arrayRecord(file, slist);
+				System.out.print("Enter an email address >> ");
+				String email = input.nextLine().trim();
+				for (String[] list : slist) {
+					if (email.equals(list[4])) {
+						System.out.println(Arrays.toString(list));
+					}
+				}
+				break;
+			}
+			case 4:
+				arrayRecord(file, slist);
+				for (DegreeProgram dp : DegreeProgram.values()) {
+					System.out.print(dp + ", ");
+				}
+				System.out.print("\nEnter a Degree Program >> ");
+				String program = input.nextLine().toUpperCase();
+
+				int p = 0;
+				for (String[] list : slist) {
+					if (program.equals(list[3])) {
+						System.out.println(Arrays.toString(list));
+						p++;
+					}
+				}
+				if (p == 0)
+					System.out.print("\nNo such students");
+				break;
+
+			case 5:
+				System.out.println("Exited.");
+				pw.close();
+				return;
+			default:
+				System.out.println("Invalid choice. Try again.");
+				break;
+			}
+
 		}
-		case 2: {
-		}
-		case 3: {
-		}
-		case 4: {
-		}
-		default: {
-			System.out.println("Invalid.");
-			display(students);
-			break;
-		}
-		}
-		
-		
-		pw.close();
 
 	}
 
-	public static Student[] newStu(Student[] students) {
+	public static Student[] newStu(Student[] students, ArrayList<String[]> records) {
 
 		String fName;
 		String lName;
@@ -93,19 +151,20 @@ public class StudentDatabase {
 			System.out.print("Student ID >> ");
 			studentId = input.nextLine();
 			// Student ID uniqueness
-			if (i > 0) {
-				int p = 0;
-				while (true) {
-					if (studentId.equals(students[p].getStudentId())) {
+			while (true) {
+				int k = 0;
+				for (String[] record : records) {
+					if (studentId.equals(record[0])) {
 						System.out.println("There is the same ID in the database. Try again. >> ");
 						studentId = input.nextLine();
-						p = 0;
-					}else {
-						p++;
+						k++;
+						break;
 					}
-					if (p == students.length) break;
 				}
+				if (k == 0)
+					break;
 			}
+
 			System.out.print("First name >> ");
 			fName = input.nextLine();
 			System.out.print("Last name >> ");
@@ -134,45 +193,80 @@ public class StudentDatabase {
 
 	}
 
-	public static Student[] bubbleSort(Student[] students, int a) {
-
-		if (a == 1) {
-			for (int i = 0; i < students.length - 1; ++i) {
-				Double b = students[i].getGpa();
-				Double c = students[i + 1].getGpa();
-				Student d = students[i];
-				if (b.compareTo(c) > 0) {
-					students[i] = students[i + 1];
-					students[i + 1] = d;
-				}
-
-			}
-		} else {
-			for (int i = 0; i < students.length - 1; ++i) {
-				String b = students[i].getStudentId();
-				String c = students[i + 1].getStudentId();
-				Student d = students[i];
-				if (b.compareTo(c) > 0) {
-					students[i] = students[i + 1];
-					students[i + 1] = d;
-				}
-
-			}
-		}
-		return students;
-	}
-
 	public static void addData(Student[] students, PrintWriter pw) {
+
 		for (Student st : students) {
-			pw.println("\n" + st.getStudentId() + ", " + st.getPerInf() + ", " + st.getDegree() + ", " + st.geteMail()
-					+ ", " + st.getGpa());
+			if (st == null)
+				System.out.println("\nno data");
+			pw.println(st.getStudentId() + "," + st.getPerInf() + "," + st.getDegree() + "," + st.geteMail() + ","
+					+ st.getGpa());
+		}
+		pw.flush();
+		System.out.println("\nStudent data saved successfully.");
+	}
+
+	public static void arrayRecord(File file, ArrayList<String[]> records) throws IOException {
+		// check if file is not empty
+		// file -> array
+		// remove extra space in array and skip a blank line
+		if (file.length() == 0) {
+			System.out.println("The file is empty.");
+			return;
+		}
+		Scanner scanner = new Scanner(file);
+		records.clear();
+		while (scanner.hasNextLine()) {
+			String line = scanner.nextLine().trim(); // read a line, remove extra space
+			if (line.isEmpty())
+				continue; // skip a blank line
+			String[] fields = line.split(","); // split a line with comma, and store them in an array fields.
+			records.add(fields); // fields array adds to records arraylist.
+		}
+		scanner.close();
+
+	}
+
+	public static void modifyRecord(ArrayList<String[]> records) throws IOException {
+		System.out.println("Student ID >> ");
+		String a = input.nextLine();
+		boolean found = false;
+
+		for (String[] record : records) {
+			if (record[0].equals(a)) {
+				System.out.println("New GPA >> ");
+				record[5] = input.nextLine();
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			System.out.println("Wrong Student ID");
+		}
+
+	}
+
+	public static void sortArray(ArrayList<String[]> records) {
+		records.removeIf(r -> r.length == 0 || r[0].trim().isEmpty()); // Remove empty entries
+		 // Sorting based on the first element (Student ID in this case)
+        records.sort(Comparator.comparingInt(r -> Integer.parseInt(r[0].trim())));
+	}
+
+	public static void displayArray(ArrayList<String[]> records) {
+		for (String[] record : records) {
+			System.out.println(Arrays.toString(record)); // print data at the memory locations
 		}
 	}
 
-	public static void display(Student[] students) {
-		for (Student st : students) {
-			System.out.print("\n" + st.getStudentId() + ", " + st.getPerInf() + ", " + st.getDegree() + ", "
-					+ st.geteMail() + ", " + st.getGpa());
+	public static void saveTxt(ArrayList<String[]> records, PrintWriter writer) throws IOException {
+
+		writer.close();
+		PrintWriter newWriter = new PrintWriter(new FileWriter("StudentRecords.txt", false)); // Overwrite mode
+		for (String[] record : records) {
+			if (record.length == 0 || record[0].trim().isEmpty())
+				continue; // Skip empty records
+			writer.println(String.join(",", record)); // Convert array to CSV line
 		}
+
+		newWriter.close();
 	}
 }

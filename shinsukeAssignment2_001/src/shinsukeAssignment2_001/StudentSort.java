@@ -63,7 +63,7 @@ private static Scanner input = new Scanner(System.in);
 
 		}
 		// Display and sort	
-		System.out.print("Which GPA and Student ID do you want to sort? (GPA: 1, Student ID: 2) >> ");
+		System.out.print("Which GPA and Student ID do you want to sort by? (GPA: 1, Student ID: 2) >> ");
 		int a = input.nextInt();
 		input.nextLine();
 		
@@ -88,7 +88,11 @@ private static Scanner input = new Scanner(System.in);
 				String b = students[i].getStudentId();
 				String c = students[i + 1].getStudentId();
 				Student d = students[i];
-				if (b.compareTo(c) > 0) {
+				
+				Integer b1 = Integer.parseInt(b);
+				Integer c1 = Integer.parseInt(c);
+				
+				if (b1.compareTo(c1) > 0) {
 					students[i] = students[i + 1];
 					students[i + 1] = d;
 				}
