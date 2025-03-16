@@ -1,16 +1,18 @@
 package shinsukeAssignment2_001;
 
-import java.io.*;
-import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Scanner;
 
 public class StudentDatabase {
 	private static Scanner input = new Scanner(System.in);
 
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
 		// io
 		String filename = "StudentRecords.txt";
 		File file = new File(filename);
@@ -18,10 +20,10 @@ public class StudentDatabase {
 
 		FileWriter fw = new FileWriter(filename, true);
 
-		// Array
+		// ArrayList
 		ArrayList<String[]> slist = new ArrayList<>();
 
-		// class
+		// Student class
 		int cap = 1;
 		Student[] students = new Student[cap];
 
@@ -54,10 +56,10 @@ public class StudentDatabase {
 					System.out.println("Please select unique ID");
 
 				}
-				newStu(students, slist);
-				addData(students, pw);
-				arrayRecord(file, slist);
-				pw.flush();
+				newStu(students, slist); // Create a Student instance
+				addData(students, pw); // Student instance -> file
+				// pw.flush(); // Write to the file
+				arrayRecord(file, slist); //
 				sortArray(slist);
 				displayArray(slist);
 				break;
