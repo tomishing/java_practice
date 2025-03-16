@@ -264,9 +264,8 @@ public class StudentDatabase {
 		PrintWriter newWriter = new PrintWriter(new FileWriter("StudentRecords.txt", false)); // Overwrite mode
 		for (String[] record : records) {
 			if (record.length == 0 || record[0].trim().isEmpty()) continue; // Skip empty records
-			writer.println(String.join(",", record)); // Convert array to CSV line
+			newWriter.println(String.join(",", record)); // Convert array to CSV line
 		}
-
 		newWriter.close();
 	}
 }
