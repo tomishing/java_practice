@@ -217,8 +217,7 @@ public class StudentDatabase {
 		records.clear();
 		while (scanner.hasNextLine()) {
 			String line = scanner.nextLine().trim(); // read a line, remove extra space
-			if (line.isEmpty())
-				continue; // skip a blank line
+			if (line.isEmpty()) continue; // skip a blank line
 			String[] fields = line.split(","); // split a line with comma, and store them in an array fields.
 			records.add(fields); // fields array adds to records arraylist.
 		}
@@ -262,8 +261,7 @@ public class StudentDatabase {
 		writer.close();
 		PrintWriter newWriter = new PrintWriter(new FileWriter("StudentRecords.txt", false)); // Overwrite mode
 		for (String[] record : records) {
-			if (record.length == 0 || record[0].trim().isEmpty())
-				continue; // Skip empty records
+			if (record.length == 0 || record[0].trim().isEmpty()) continue; // Skip empty records
 			writer.println(String.join(",", record)); // Convert array to CSV line
 		}
 
