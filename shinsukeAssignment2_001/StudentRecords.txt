@@ -1,0 +1,4 @@
+100,Dv Ka, 444,BUSINESS,div@ggg.aaa,3.0
+200,eee bbb, 666,ARTS,eee@aaa.com,2.0
+500,tta yya, 555,ARTS,tta@aa.ccc,1.5
+300,wwa oob, 888,ARTS,wwa@gmail.com,3.0
