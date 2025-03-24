@@ -1,7 +1,6 @@
 package chap09;
 
 import java.util.Scanner;
-
 public class DemoPoem {
 
 	private static Scanner input = new Scanner(System.in);
