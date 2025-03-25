@@ -2,8 +2,8 @@ package chap09;
 
 public abstract class Book {
 	private String title;
-	private double price;
-	
+	protected double price;
+
 	public Book(String title) {
 		this.title = title;
 	}
@@ -15,6 +15,7 @@ public abstract class Book {
 	public double getPrice() {
 		return price;
 	}
+
 	public abstract void setPrice();
 
 }
