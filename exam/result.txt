@@ -1,0 +1,1 @@
+Room type: Parkside, Bed = Two, meal: 200Total cost is: 875
