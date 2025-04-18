@@ -13,13 +13,13 @@ public class Postgres {
 		ResultSet rs = null;
 		
 		try {
-			String url="jdbc:postgresql://localhost:5432/periodic_table";
+			String url="jdbc:postgresql://localhost:5432/climate";
 			conn = DriverManager.getConnection(url, "postgres", "postgres");
 			st = conn.createStatement();
-			rs = st.executeQuery("select * from periodic_table limit 5");
+			rs = st.executeQuery("select count(*) from employees;");
 			while (rs.next()) {
-				System.out.print("Column 2 returned ");
-				System.out.println(rs.getString(2));
+				System.out.print("Column 1 returned ");
+				System.out.println(rs.getString(1));
 			}
 			conn.close();
 		}catch(SQLException e) {

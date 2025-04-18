@@ -2,6 +2,11 @@ package lab11;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -25,6 +30,7 @@ public class ThirdInsurance extends JFrame {
 	private JCheckBox chVision;
 	private JButton btnCalc;
 	private JButton btnExit;
+
 	/**
 	 * Launch the application.
 	 */
@@ -51,14 +57,14 @@ public class ThirdInsurance extends JFrame {
 	}
 
 	private void handlingData() {
+
 		btnCalc.addActionListener(e -> {
 			try {
 				String ins = null;
 				int cost = 0;
-				int cost1 = 0, cost2 = 0;
-				boolean op = false;
-				boolean op1 = false;
-				if(rdHmo.isSelected()) {
+				boolean op = chDental.isSelected();
+				boolean op1 = chVision.isSelected();
+				if (rdHmo.isSelected()) {
 					ins = "HMO";
 					cost = 200;
 				}
@@ -66,29 +72,21 @@ public class ThirdInsurance extends JFrame {
 					ins = "Ppo";
 					cost = 600;
 				}
-				if(chDental.isSelected()) {
-					op = true;
-					cost1 = 75;
-				}else {
-					op = false;
-					cost1 = 0;
-				}
-				if(chVision.isSelected()) {
-					op1 = true;
-					cost2 = 20;
-				}
-				else {
-					op1 = false;
-					cost2 = 0;
-				}
-				
+				if (op) cost += 75;		
+				if (op1) cost += 20;
+			
+
 				calcTotalCost result = new calcTotalCost(ins, cost, op, op1);
 				JOptionPane.showMessageDialog(null, result.display());
 				
-			}catch(Exception ex) {
+				dbInsurance database = new dbInsurance(ins, cost, op, op1);
+				database.insertTable();
+
+			} catch (Exception ex) {
 				JOptionPane.showMessageDialog(null, ex.getMessage());
 			}
 		});
+
 		btnExit.addActionListener(e -> System.exit(0));
 	}
 
